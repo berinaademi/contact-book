@@ -22,6 +22,6 @@ python contact_book.py
 This project is being built step by step.
 
 - [x] Command-line version (Python)
-- [ ] Backend API (Flask)
+- [x] Backend API (Flask)
 - [ ] Frontend (JavaScript)
 - [ ] Full-stack deployment
