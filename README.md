@@ -23,5 +23,5 @@ This project is being built step by step.
 
 - [x] Command-line version (Python)
 - [x] Backend API (Flask)
-- [ ] Frontend (JavaScript)
+- [x] Frontend (JavaScript)
 - [ ] Full-stack deployment
