@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 import sqlite3
+from flask_cors import CORS
 
 
 def init_db():
@@ -15,6 +16,7 @@ def init_db():
 
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route("/")
