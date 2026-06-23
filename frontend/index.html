@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/frontend/style.css">
+    <title>Contact Book</title>
+</head>
+<body>
+    <div class="nokia">
+        <div class="nokia-top">NOKIA</div>
+        <div class="screen-frame">
+            <div class="screen">
+                <h1>CONTACTS</h1>
+                <div class="add-form">
+                    <input id="name" placeholder="Name" />
+                    <input id="phone" placeholder="Phone" />
+                    <input id="email" placeholder="Email" />
+                    <button onclick="addContact()">Add Contact</button>
+                    <p id="error-message">Please fill in all fields!</p>
+                </div>
+                <ul id="contacts-list"></ul>
+            </div>
+        </div>
+    </div>
+    
+
+    <script> 
+        function getContacts() {
+            fetch("http://127.0.0.1:5000/contacts")
+            .then(response => response.json())
+            .then(data => {
+                let list = document.getElementById("contacts-list")
+                list.innerHTML = ""
+                data.forEach(contact => {
+                    list.innerHTML += `<li>${contact.name} - ${contact.phone} - ${contact.email}
+                        <button onclick="deleteContact('${contact.name}')">Delete</button></li>`
+                });
+            })
+        }
+
+        function addContact() {
+            let name = document.getElementById("name").value
+            let email = document.getElementById("email").value
+            let phone = document.getElementById("phone").value
+            if (name === "" || phone === "" || email === ""){
+                document.getElementById("error-message").style.display = "block"
+                return
+            }
+            document.getElementById("error-message").style.display = "none"
+           if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                document.getElementById("error-message").innerText = "Please enter a valid email!"
+                document.getElementById("error-message").style.display = "block"
+                return
+            }
+            if (!/^[0-9+]+$/.test(phone)) {
+                document.getElementById("error-message").innerText = "Please enter a valid phone number!"
+                document.getElementById("error-message").style.display = "block"
+                return
+            }
+            fetch("http://127.0.0.1:5000/contacts", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: name, phone: phone, email: email })
+            })
+            .then(() => getContacts())
+            console.log("Contact added")
+        }
+
+        function deleteContact(name) {
+            fetch(`http://127.0.0.1:5000/contacts/${name}`, {
+                method: "DELETE"
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                getContacts()
+            })
+        }
+
+        getContacts()
+    </script>
+</body>
+</html>
